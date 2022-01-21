@@ -66,9 +66,21 @@ async function getUser(id, username) {
     return user;
 }
 
+async function updateAvatar(ctx) { 
+    const { id } = ctx.user;
+    try {
+        await User.findByIdAndUpdate(id, { avatar: "" });
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 
 module.exports = {
     register,
     login,
     getUser,
-}
+    updateAvatar,
+};

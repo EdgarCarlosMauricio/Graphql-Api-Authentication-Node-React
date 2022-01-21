@@ -1,7 +1,9 @@
 const { gql } = require("apollo-server");
 
+
 const typeDefs = gql`
-    type User{
+    scalar Upload
+    type User {
         id: ID
         name: String
         username: String
@@ -16,6 +18,11 @@ const typeDefs = gql`
 
     type Token {
         token: String
+    }
+
+    type UpdateAvatar {
+        status: Boolean
+        urlAvatar: String
     }
 
     input UserInput {
@@ -35,10 +42,11 @@ const typeDefs = gql`
         getUser(id: ID, username: String): User
     }
 
-    type Mutation {
+    type Mutation { 
         # User, Luego de los puntos se refiere a lo que devuelve
         register(input: UserInput): User
         login(input: LoginInput): Token
+        updateAvatar(file: Upload): UpdateAvatar
     }
 `;
 
