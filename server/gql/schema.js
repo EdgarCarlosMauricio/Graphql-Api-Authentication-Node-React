@@ -1,7 +1,6 @@
-const { gql } = require("apollo-server");
+const { gql } = require("apollo-server-express");
 
-
-const typeDefs = gql`
+export const typeDefs = gql`
     scalar Upload
     type User {
         id: ID
@@ -15,39 +14,40 @@ const typeDefs = gql`
         createdAt: String
         updatedAt: String
     }
-
     type Token {
         token: String
+    }
+
+    type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
     }
 
     type UpdateAvatar {
         status: Boolean
         urlAvatar: String
     }
-
     input UserInput {
         name: String!
         username: String!
         email: String!
         password: String!
     }
-
     input LoginInput {
         email: String!
         password: String!
     }
-
     type Query {
         # User
         getUser(id: ID, username: String): User
     }
-
-    type Mutation { 
+    type Mutation {
         # User, Luego de los puntos se refiere a lo que devuelve
         register(input: UserInput): User
         login(input: LoginInput): Token
         updateAvatar(file: Upload): UpdateAvatar
+        # updateAvatar(file: Upload!): File!
     }
 `;
 
-module.exports = typeDefs;

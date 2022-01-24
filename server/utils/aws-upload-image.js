@@ -1,3 +1,4 @@
+
 require("dotenv").config({ path: ".env" });
 const AWS = require("aws-sdk");
 
@@ -10,7 +11,7 @@ const s3 = new AWS.S3({
     secretAccessKey: SECRET
 });
 
-async function awsUploadImage(file, filePath) { 
+async function awsUploadImage(file, filePath) {
     const params = {
         Bucket: BUCKET_NAME,
         Key: `${filePath}`,

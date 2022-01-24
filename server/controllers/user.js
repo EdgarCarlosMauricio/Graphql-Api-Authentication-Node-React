@@ -1,8 +1,9 @@
 const User = require("../models/user");
+//const User = require("../db/schema/user");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-function createToken(user, SECRET_KEY, expiresIn) { 
+function createToken(user, SECRET_KEY, expiresIn) {
     const { id, name, email, username } = user;
     const payload = {
         id,
@@ -43,7 +44,7 @@ async function register(input) {
     }
 }
 
-async function login(input) { 
+async function login(input) {
     const { email, password } = input;
 
     const userFound = await User.findOne({ email: email.toLowerCase() });
@@ -66,15 +67,17 @@ async function getUser(id, username) {
     return user;
 }
 
-async function updateAvatar(ctx) { 
-    const { id } = ctx.user;
+async function updateAvatar(file) {
+    
+    console.log(file);
+    /* const { id } = ctx.user;
     try {
         await User.findByIdAndUpdate(id, { avatar: "" });
         return true;
     } catch (error) {
         console.log(error);
         return false;
-    }
+    } */
 }
 
 
