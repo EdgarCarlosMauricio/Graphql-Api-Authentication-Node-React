@@ -27,4 +27,23 @@ async function awsUploadImage(file, filePath) {
     }
 }
 
-module.exports = awsUploadImage;
+async function awsDeleteS3(filePath) {
+    
+    const sinHttp = filePath.replace(`https://${BUCKET_NAME}.s3.amazonaws.com/`, "");
+    const params = {
+        Bucket: BUCKET_NAME,
+        Key: `${sinHttp}`,
+    };
+    try {
+        await s3.deleteObject(params).promise();
+        return true;
+    } catch (error) {
+        console.log(error);
+        throw new Error()
+    }
+}
+
+module.exports = {
+    awsUploadImage,
+    awsDeleteS3
+};

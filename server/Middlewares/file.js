@@ -7,7 +7,7 @@ module.exports.readFile = async (file) => {
     const stream = createReadStream();
     var { ext, name } = parse(filename);
     console.log("ext: ", ext, "name:", name)
-    name = `single${Math.floor((Math.random() * 10000) + 1)}`;
+    name = `file${Math.floor((Math.random() * 10000) + 1)}`;
     console.log("name:", name);
     let url = join(__dirname, `../Upload/${name}-${Date.now()}${ext}`);
     const imageStream = await createWriteStream(url)

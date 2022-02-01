@@ -5,7 +5,8 @@ const { User } = require("../Model/user");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { parse, join } = require("path");
-const awsUploadImage = require("../utils/aws-upload-image");
+const { awsUploadImage, awsDeleteS3 } = require("../utils/aws-upload-image");
+const { nanoid } = require("nanoid");
 // const userController = require("../controllers/user");
 
 
@@ -78,26 +79,74 @@ module.exports = {
             };
         },
         // updateAvatar: (_, { file }) => userController.updateAvatar(file),
-        updateAvatar: async (_, { file }) => {
+        updateAvatar: async (_, { file }, context) => {
+            // sacamos la id del usuario del contexto extraido del token en apollo.js
+            //enviado desde el front
+            const { id } = context.user;
+            // con el id buscamos la urlAvatar en la bd para borrar la actual antes de subir la nueva
+            const userX = await User.findById(id);
+            // borramos el avatar actual
+            if (userX.avatar) {
+                try {
+                    const deleteActual = await awsDeleteS3(userX.avatar);
+                    // console.log("Borrado avaatr anterior: ", deleteActual);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
             const { createReadStream, filename } = await file;
+            // sacamos la extencion del archivo
             var { ext, name } = parse(filename);
-            const imageName = `avatar/avt${ext}`;
+            // avatar es el nombre de la carpeta en S3
+            const uuidNew = nanoid();
+            const imageName = `avatar/${id}-${name}-${uuidNew}${ext}`;
+            // cada vez que se cambie el avatar sobreescribira el que esta.
             const fileData = createReadStream();
             try {
+                // Opcion de guardar en el servidor los archivos con las siguientes dos lineas
+                // const imageUrl = await readFile(file);
+                // const singlefile = new SingleFile({ image: imageUrl });
+                
+                
                 const result = await awsUploadImage(fileData, imageName);
-                console.log(result);
+                // guardamos el link del avatar subido en la BD
+                await User.findByIdAndUpdate(id, { avatar: result });
+                // Retornamos status y la url del avatar
+                return {
+                    status: true,
+                    urlAvatar: result,
+                };
             } catch (error) {
                 return {
                     status: false,
-                    urlAvatar: null
+                    urlAvatar: null,
+                };
+            }
+        },
+        // los datos del avatar a borrar llegan por el contexto
+        deleteAvatar: async (_, {}, context) => {
+            const { id } = context.user;
+            // con el id buscamos la urlAvatar en la bd para borrar la actual antes de subir la nueva
+            const userX = await User.findById(id);
+            // borramos el avatar actual
+            if (userX.avatar) {
+                try {
+                    const deleteActual = await awsDeleteS3(userX.avatar);
+                    // console.log("Borrado de avatar anterior: ", deleteActual);
+                } catch (error) {
+                    console.log(error);
                 }
             }
-            //const imageUrl = await readFile(file);
-            // const singlefile = new SingleFile({ image: imageUrl });
-            //const user = new User({ avatar: imageUrl });
-            // await User.findByIdAndUpdate(id, { avatar: "" });
-            // return true;
+            // reseteamos a "" la urlAvatar
+            try {
+                await User.findByIdAndUpdate(id, { avatar: "" });
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
         },
+
         singleUpload: async (_, { file }) => {
             const imageUrl = await readFile(file);
             const singlefile = new SingleFile({ image: imageUrl });
