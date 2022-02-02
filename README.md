@@ -22,3 +22,8 @@
 * graphql
 * jwt-decode
 * semantic-ui-react
+
+
+
+Autor: "Alzheimeer" Edgar Quintero Romero
+02/02/2022
