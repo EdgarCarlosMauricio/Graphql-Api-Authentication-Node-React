@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { ApolloProvider } from "@apollo/client";
-import { ToastContainer } from "react-toastify";
-import client from "./config/apollo";
-import Auth from "./pages/Auth";
-import { getToken, decodeToken } from "./utils/token";
-import AuthContext from "./context/AuthContext";
+import { ApolloProvider } from '@apollo/client';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+
+import client from './config/apollo';
+import AuthContext from './context/AuthContext';
+import Auth from './pages/Auth';
 import Navigation from './routes/Navigation';
+import { decodeToken, getToken, removeToken } from './utils/token';
 
 export default function App() {
   
@@ -22,7 +23,8 @@ export default function App() {
   }, [])
 
   const logout = () => {
-    console.log("cerrar");
+    removeToken();
+    setAuth(null);
   };
 
   const setUser = (user) => {

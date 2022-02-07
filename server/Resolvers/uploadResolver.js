@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { parse, join } = require("path");
 const { awsUploadImage, awsDeleteS3 } = require("../utils/aws-upload-image");
 const { nanoid } = require("nanoid");
-// const userController = require("../controllers/user");
+
 
 
 function createToken(user, SECRET_KEY, expiresIn) {
@@ -106,8 +106,7 @@ module.exports = {
                 // Opcion de guardar en el servidor los archivos con las siguientes dos lineas
                 // const imageUrl = await readFile(file);
                 // const singlefile = new SingleFile({ image: imageUrl });
-                
-                
+
                 const result = await awsUploadImage(fileData, imageName);
                 // guardamos el link del avatar subido en la BD
                 await User.findByIdAndUpdate(id, { avatar: result });
@@ -125,6 +124,8 @@ module.exports = {
         },
         // los datos del avatar a borrar llegan por el contexto
         deleteAvatar: async (_, {}, context) => {
+            // sacamos el id del contexto
+            // el contexto llega por los headers y se configura en el archivo apollo.js
             const { id } = context.user;
             // con el id buscamos la urlAvatar en la bd para borrar la actual antes de subir la nueva
             const userX = await User.findById(id);
@@ -140,6 +141,36 @@ module.exports = {
             // reseteamos a "" la urlAvatar
             try {
                 await User.findByIdAndUpdate(id, { avatar: "" });
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+        },
+
+        updateUser: async (_, { input }, context) => {
+            // sacamos el id del contexto
+            // el contexto llega por los headers y se configura en el archivo apollo.js
+            const { id } = context.user;
+
+            try {
+                if (input.currentPassword && input.newPassword) {
+                    // Traemos la contraseña guardada, y comparamos con la contraseña enviada
+                    const userFound = await User.findById(id);
+                    const passwordSucess = await bcryptjs.compare(
+                        input.currentPassword,
+                        userFound.password
+                    );
+                    if (!passwordSucess) throw new Error("Contraseña Incorrecta");
+
+                    const salt = await bcryptjs.genSaltSync(10);
+                    const newPaswordCrypt = await bcryptjs.hash(input.newPassword, salt);
+
+                    await User.findByIdAndUpdate(id, { password: newPaswordCrypt });
+
+                } else {
+                    await User.findByIdAndUpdate(id, input);
+                }
                 return true;
             } catch (error) {
                 console.log(error);
