@@ -21,8 +21,15 @@ const apolloServer = new ApolloServer({
                 }
             } catch (error) {
                 console.log("#### ERROR ####");
-                console.log(error);
-                throw new Error("Token Invalido");
+                if (error.name === "TokenExpiredError") {
+                    console.log("Token Expiro");
+                    throw new Error("Token Invalido"); 
+                } else {
+                    console.log(error);
+                    throw new Error("Token Invalido"); 
+                }
+                
+                
             }
         }
     }

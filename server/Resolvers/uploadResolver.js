@@ -75,7 +75,10 @@ module.exports = {
             if (!passwordSucess)
                 throw new Error("Error en el email o contraseña");
             return {
-                token: createToken(userFound, process.env.SECRET_KEY, "6h"),
+                // token: createToken(userFound, process.env.SECRET_KEY, "1h"),
+                // token: createToken(userFound, process.env.SECRET_KEY, "20d"),
+                // token: createToken(userFound, process.env.SECRET_KEY, "120"), ms
+                token: createToken(userFound, process.env.SECRET_KEY, "1d"),
             };
         },
         // updateAvatar: (_, { file }) => userController.updateAvatar(file),

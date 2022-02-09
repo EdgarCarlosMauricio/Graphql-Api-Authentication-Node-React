@@ -21,7 +21,7 @@ module.exports = gql`
         status: Boolean
         urlAvatar: String
     }
-    
+
     input UserInput {
         name: String!
         username: String!
@@ -33,14 +33,14 @@ module.exports = gql`
         email: String!
         password: String!
     }
-    
+
     input UserUpdateInput {
         name: String
         email: String
         currentPassword: String
         newPassword: String
         siteWeb: String
-
+        description: String
     }
     extend type Query {
         getUser(id: ID, username: String): User

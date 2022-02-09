@@ -6728,6 +6728,11 @@ jsx-ast-utils@^2.2.1, jsx-ast-utils@^2.2.3:
     array-includes "^3.1.1"
     object.assign "^4.1.0"
 
+jwt-check-expiry@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/jwt-check-expiry/-/jwt-check-expiry-1.0.10.tgz#9159f2e41b7bbe4f816ea27ceaf2a5f46dea4971"
+  integrity sha512-DaqnmxMu9WSmCnCiL6mblrSxNwG5K7F8xbP9FVXhDlttglbxfluLRIzUqQE8W0mr5SU246HFMJEln/RXjWZkNQ==
+
 jwt-decode@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"

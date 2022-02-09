@@ -1,12 +1,15 @@
-import React, { useState} from 'react';
-import { Form, Button } from "semantic-ui-react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../../../gql/user";
-import { setToken, decodeToken } from "../../../utils/token";
-import "./LoginForm.scss";
-import useAuth from "../../../hooks/useAuth";
+import './LoginForm.scss';
+
+import { useMutation } from '@apollo/client';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
+import * as Yup from 'yup';
+
+import { LOGIN } from '../../../gql/user';
+import useAuth from '../../../hooks/useAuth';
+import { decodeToken, setToken } from '../../../utils/token';
+
 
 
 export default function LoginForm() {
