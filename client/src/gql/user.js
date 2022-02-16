@@ -59,3 +59,12 @@ export const UPDATE_USER = gql`
     }
 `;
 
+export const SEARCH_USERS = gql`
+    query search($search: String) {
+        search(search: $search){
+            name
+            username
+            avatar
+        }
+    }
+`;
