@@ -4,6 +4,7 @@
 ### Login
 ### Recuperacion De Contraseña
 ### Subida, Actualizacion Y Borrado De Avatar
+### Busqueda De Usuarios y redireccion a este usuario
 
 
 ## Backend //npm start
@@ -26,4 +27,4 @@
 
 
 Autor: "Alzheimeer" Edgar Quintero Romero
-02/02/2022
+16/02/2022
