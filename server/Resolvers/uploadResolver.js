@@ -33,7 +33,13 @@ module.exports = {
             return user;
         },
         greetings: () => {
-            return "Hola Mundo";
+            return "Bienvenido";
+        },
+        search: async (_, { search }) => {
+            const users = await User.find({
+                name: { $regex: search, $options: "i"}
+            });
+            return users;
         },
     },
     Mutation: {
@@ -164,13 +170,18 @@ module.exports = {
                         input.currentPassword,
                         userFound.password
                     );
-                    if (!passwordSucess) throw new Error("Contraseña Incorrecta");
+                    if (!passwordSucess)
+                        throw new Error("Contraseña Incorrecta");
 
                     const salt = await bcryptjs.genSaltSync(10);
-                    const newPaswordCrypt = await bcryptjs.hash(input.newPassword, salt);
+                    const newPaswordCrypt = await bcryptjs.hash(
+                        input.newPassword,
+                        salt
+                    );
 
-                    await User.findByIdAndUpdate(id, { password: newPaswordCrypt });
-
+                    await User.findByIdAndUpdate(id, {
+                        password: newPaswordCrypt,
+                    });
                 } else {
                     await User.findByIdAndUpdate(id, input);
                 }

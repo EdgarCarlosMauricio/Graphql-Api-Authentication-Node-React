@@ -1,9 +1,12 @@
+import './Header.scss';
+
 import React from 'react';
-import "./Header.scss";
-import { Container, Grid, Image } from 'semantic-ui-react';
-import logo from "../../assets/png/instaclone.png";
 import { Link } from 'react-router-dom';
+import { Container, Grid, Image } from 'semantic-ui-react';
+
+import logo from '../../assets/png/instaclone.png';
 import RightHeader from './RightHeader/RightHeader';
+import Search from './Search/Search';
 
 export default function Header() {
     return (
@@ -16,7 +19,7 @@ export default function Header() {
                        </Link>
                     </Grid.Column>
                     <Grid.Column width={10}>
-                        <p>Buscador</p>
+                        <Search />
                     </Grid.Column>
                     <Grid.Column width={3}>
                         <RightHeader />

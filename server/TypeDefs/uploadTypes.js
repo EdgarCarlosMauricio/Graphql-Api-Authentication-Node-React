@@ -45,6 +45,7 @@ module.exports = gql`
     extend type Query {
         getUser(id: ID, username: String): User
         greetings: String
+        search(search: String): [User]
     }
     extend type Mutation {
         register(input: UserInput): User
